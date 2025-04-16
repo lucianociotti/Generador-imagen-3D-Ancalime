@@ -1,6 +1,7 @@
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QMessageBox
-from src import core_cad, renderer
+from src import core_cad
+from src.renderer import create_renderer_window
 
 class MainGUI(QMainWindow):
     def __init__(self):
@@ -31,8 +32,9 @@ class MainGUI(QMainWindow):
         QMessageBox.information(self, "Generado", f"Modelo 3D generado y exportado a {self.stl_file}")
 
     def render_model(self):
-        # Llama al renderizador; este abrirá una nueva ventana.
-        renderer.launch_renderer(self.stl_file)
+        # Lanza el renderizador en la misma instancia de QApplication
+        # create_renderer_window devuelve la ventana, retén la referencia para que no se cierre
+        self._renderer_window = create_renderer_window(self.stl_file)
 
 def run_gui():
     app = QApplication(sys.argv)
