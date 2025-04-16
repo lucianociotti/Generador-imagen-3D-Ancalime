@@ -1,4 +1,4 @@
-import sys, io
+import sys
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget,
     QProgressBar, QTextEdit
@@ -26,10 +26,11 @@ class RenderWindow(QMainWindow):
         self.progress = QProgressBar()
         self.progress.setRange(0, 100)
         layout.addWidget(self.progress)
-        self.log = QTextEdit(readOnly=True)
+        self.log = QTextEdit()
+        self.log.setReadOnly(True)
         self.log.setFixedHeight(150)
         layout.addWidget(self.log)
-        self.preview = QLabel()               # Aquí irá la imagen
+        self.preview = QLabel()
         self.preview.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.preview)
         container = QWidget()
@@ -57,7 +58,6 @@ class RenderWindow(QMainWindow):
             self._show_preview(self._stl)
 
     def _show_preview(self, stl_file):
-        # Carga la malla y genera una imagen PNG en memoria
         mesh = trimesh.load_mesh(stl_file)
         png = mesh.scene().save_image(resolution=(600,400), visible=True)
         pix = QPixmap()
